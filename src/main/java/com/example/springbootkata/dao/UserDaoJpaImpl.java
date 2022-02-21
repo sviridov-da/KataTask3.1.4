@@ -34,11 +34,7 @@ public class UserDaoJpaImpl implements UserDao {
 
     @Override
     public void update(long id, User user) {
-        User userToUpdate = entityManager.find(User.class, id);
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setSurname(user.getSurname());
-        userToUpdate.setName(user.getName());
-        userToUpdate.setAge(user.getAge());
+        entityManager.merge(user);
     }
 
     @Override
