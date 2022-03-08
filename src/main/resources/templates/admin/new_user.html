@@ -5,7 +5,11 @@
   <title>New user</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/users}" th:object="${user}">
+<header>
+  <a href="/logout">Logout</a>
+  <hr/>
+</header>
+<form th:method="POST" th:action="@{/admin/users}" th:object="${user}">
   <label for="name">Имя: </label>
   <input type="text" th:field="*{name}" id="name"/>
   <br>
@@ -17,6 +21,14 @@
   <br>
   <label for="email">EMail: </label>
   <input type="email" th:field="*{email}" id="email"/>
+  <br>
+  <label for="pass">Пароль: </label>
+  <input type="password" th:field="*{password}" id="pass"/>
+  <br>
+  <select th:field="*{roles}" multiple>
+    <option th:value="'ROLE_USER'" th:text="USER"></option>
+    <option th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
+  </select>
   <br>
   <hr/>
   <input type="submit" value="Добавить пользователя"/>

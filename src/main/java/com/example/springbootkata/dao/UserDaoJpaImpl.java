@@ -3,9 +3,7 @@ package com.example.springbootkata.dao;
 import com.example.springbootkata.models.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 @Repository
@@ -22,9 +20,20 @@ public class UserDaoJpaImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(long id) {
+    public User getUserById(int id) {
         User res = entityManager.find(User.class, id);
         return res;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :login");
+        query.setParameter("login", email);
+        try {
+            return (User) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -33,12 +42,12 @@ public class UserDaoJpaImpl implements UserDao {
     }
 
     @Override
-    public void update(long id, User user) {
+    public void update(int id, User user) {
         entityManager.merge(user);
     }
 
     @Override
-    public void deleteUser(long id) {
+    public void deleteUser(int id) {
             entityManager.createQuery("DELETE FROM User u WHERE u.id = :id").setParameter("id", id).executeUpdate();
     }
 }
