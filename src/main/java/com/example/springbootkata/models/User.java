@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.swing.*;
@@ -65,6 +66,7 @@ public class User implements UserDetails {
         email = form.getEmail();
         if(!form.getPassword().equals("")) {
             password = form.getPassword();
+            password = new BCryptPasswordEncoder().encode(password);
         }
         roles = new HashSet<>();
         for(Role role : roleService.getAllRoles()){
