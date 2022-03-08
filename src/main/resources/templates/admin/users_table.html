@@ -8,10 +8,12 @@
 <header>
     <table>
         <tr>
-            <td th:each="role : ${user.getRoles()}">
-                <a href="/user" th:if="${role.getValue()} == 'ROLE_USER'">На свою страницу<br></a>
+            <td>
+                <a href="/user">На свою страницу<br></a>
             </td>
-            <td><a href="/logout">Logout</a></td>
+            <td>
+                <a href="/logout">Logout</a>
+            </td>
         </tr>
     </table>
     <hr/>
