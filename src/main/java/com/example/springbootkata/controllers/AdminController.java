@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -29,17 +30,13 @@ public class AdminController {
     @GetMapping()
     public String index(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.getAllUsers().stream().map(u -> new UserForm(u)).collect(Collectors.toList()));
         model.addAttribute("user", userService.getUserByEmail(authentication.getName()));
+        model.addAttribute("formUser", new UserForm());
         return "admin/users_table";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        System.out.println(userService.getUserById(id).getName());
-        return "admin/user";
-    }
+
 
     @GetMapping("/new")
     public String newUser(@ModelAttribute("user") UserForm user, Model model) {
@@ -53,11 +50,6 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
-    @GetMapping("/{id}/edit")
-    public String createUser(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", new UserForm(userService.getUserById(id)));
-        return "admin/edit_user";
-    }
 
     @PatchMapping("/{id}")
     public String updateUser(@ModelAttribute("user") UserForm user, @PathVariable("id") int id) {

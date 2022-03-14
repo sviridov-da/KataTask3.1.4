@@ -53,7 +53,7 @@ public class User implements UserDetails {
         password = form.getPassword();
         roles = new HashSet<>();
         for(Role role : roleService.getAllRoles()){
-            if(form.getRoles().contains(role)){
+            if(form.getRoles().contains(role.getValue())){
                 roles.add(role);
             }
         }
@@ -70,10 +70,11 @@ public class User implements UserDetails {
         }
         roles = new HashSet<>();
         for(Role role : roleService.getAllRoles()){
-            if(form.getRoles().contains(role)){
+            if(form.getRoles().contains(role.getValue())){
                 roles.add(role);
             }
         }
+
     }
 
     public int getId() {

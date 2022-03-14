@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserForm {
     @Autowired
@@ -19,7 +20,7 @@ public class UserForm {
     private byte age;
     private String email;
     private String password;
-    private Set<Role> roles;
+    private Set<String> roles;
 
     public UserForm() {
         roles = new HashSet<>();
@@ -35,7 +36,7 @@ public class UserForm {
         this.roles = new HashSet<>();
         for(Role role : service.getAllRoles()){
             if(roles.contains(role.getValue())){
-                this.roles.add(role);
+                this.roles.add(role.getValue());
             }
         }
     }
@@ -47,7 +48,7 @@ public class UserForm {
         age = user.getAge();
         email = user.getEmail();
         password = "";
-        roles = user.getRoles();
+        roles = user.getRoles().stream().map(r->r.getValue()).collect(Collectors.toSet());
     }
 
     public int getId() {
@@ -98,11 +99,18 @@ public class UserForm {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        this.roles = roles.stream().map(r->r.getValue()).collect(Collectors.toSet());
+    }
+
+    public boolean hasAdminRole(){
+        return roles.contains("ROLE_ADMIN");
+    }
+    public boolean hasUserRole(){
+        return roles.contains("ROLE_USER");
     }
 }
